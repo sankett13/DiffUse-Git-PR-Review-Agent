@@ -1,13 +1,17 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
-// ADD THIS BACK:
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
+  extensions = [pgvector, pg_graphql, pg_stat_statements, pgcrypto, supabase_vault, uuid_ossp(map: "uuid-ossp")]
 }
 
+// ─────────────────────────────────────────────
+// User — the person who signs up / logs in
+// ─────────────────────────────────────────────
 model User {
   id        String    @id @default(uuid())
   email     String    @unique
@@ -20,5 +24,118 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  installations Installation[]
+  reviews       Review[]
+
   @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// Installation — a GitHub App installation
+// ─────────────────────────────────────────────
+model Installation {
+  id                   String    @id @default(uuid())
+  githubInstallationId Int       @unique
+  accountLogin         String // GitHub username or org name
+  accountType          String    @default("User") // "User" | "Organization"
+  accessToken          String?
+  accessTokenExpiresAt DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  userId       String
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repositories Repository[]
+
+  @@map("installations")
+}
+
+// ─────────────────────────────────────────────
+// Repository — a repo the user granted access to
+// ─────────────────────────────────────────────
+model Repository {
+  id            String   @id @default(uuid())
+  githubRepoId  Int      @unique
+  fullName      String // e.g. "sankett13/DiffUse"
+  name          String // e.g. "DiffUse"
+  private       Boolean  @default(false)
+  defaultBranch String   @default("main")
+  language      String?
+  description   String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  installationId String
+  installation   Installation @relation(fields: [installationId], references: [id], onDelete: Cascade)
+
+  codeChunks CodeChunk[]
+  reviews    Review[]
+
+  @@map("repositories")
+}
+
+// ─────────────────────────────────────────────
+// CodeChunk — embedded code snippet for semantic search
+// ─────────────────────────────────────────────
+model CodeChunk {
+  id        String                       @id @default(uuid())
+  filePath  String // e.g. "src/utils/auth.ts"
+  content   String // raw code content
+  startLine Int
+  endLine   Int
+  embedding Unsupported("vector(1536)")?
+  metadata  Json? // any extra info (language, sha, etc.)
+  createdAt DateTime                     @default(now())
+  updatedAt DateTime                     @updatedAt
+
+  repositoryId String
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  @@map("code_chunks")
+}
+
+// ─────────────────────────────────────────────
+// Review — an AI-generated PR review
+// ─────────────────────────────────────────────
+model Review {
+  id           String   @id @default(uuid())
+  prNumber     Int
+  prTitle      String?
+  status       String   @default("pending") // "pending" | "in_progress" | "completed" | "failed"
+  reviewBody   String?  @db.Text
+  summary      String?  @db.Text
+  fileCount    Int?
+  commentCount Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  repositoryId String
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fixPr FixPr?
+
+  @@unique([repositoryId, prNumber])
+  @@map("reviews")
+}
+
+// ─────────────────────────────────────────────
+// FixPr — an automated fix PR created by the AI
+// ─────────────────────────────────────────────
+model FixPr {
+  id          String   @id @default(uuid())
+  fixPrNumber Int?
+  branchName  String?
+  status      String   @default("pending") // "pending" | "creating" | "created" | "failed"
+  diffSummary String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reviewId String @unique
+  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@map("fix_prs")
 }

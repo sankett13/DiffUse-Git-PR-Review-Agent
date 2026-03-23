@@ -2,20 +2,27 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { loginSchema } from "@/validations/auth.validations";
-import {
-  authService,
-  type LoginUser,
-  getApiErrorMessage,
-} from "@/services/auth.service";
+import { type LoginUser, getApiErrorMessage } from "@/services/auth.service";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
+import useAuthStore from "@/store/useAuthStore";
+import { useRouter } from "next/navigation";
+import AuthButton from "@/components/AuthButton";
 
 export default function LoginPage() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login, isAuthenticated } = useAuthStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated, router]);
 
   const {
     register,
@@ -30,9 +37,8 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await authService.login(data);
-      console.log("Logged in:", response);
-      // TODO: handle redirect / session
+      await login(data);
+      router.push("/dashboard");
     } catch (error) {
       const message = getApiErrorMessage(
         error,
@@ -83,22 +89,22 @@ export default function LoginPage() {
             )}
 
             <div className="flex flex-col gap-3 mb-5 mt-2">
-              <button
-                type="button"
-                onClick={() => console.log("Log in with GitHub")}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition cursor-pointer"
-              >
-                <FaGithub className="h-4 w-4" />
-                <span>Log in with GitHub</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => console.log("Log in with Google")}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition cursor-pointer"
-              >
-                <FcGoogle className="h-4 w-4" />
-                <span>Log in with Google</span>
-              </button>
+              <AuthButton
+                icon={<FaGithub className="h-[18px] w-[18px]" />}
+                text="Continue with GitHub"
+                onClick={() =>
+                  (window.location.href =
+                    "http://localhost:4000/api/auth/github")
+                }
+              />
+              <AuthButton
+                icon={<FcGoogle className="h-[18px] w-[18px]" />}
+                text="Continue with Google"
+                onClick={() =>
+                  (window.location.href =
+                    "http://localhost:4000/api/auth/google")
+                }
+              />
             </div>
 
             <div className="relative mb-6">

@@ -29,13 +29,20 @@ export const getApiErrorMessage = (
   return fallback;
 };
 
+export interface AuthResponse {
+  success: boolean;
+  accessToken?: string;
+  errors?: string[];
+  message?: string;
+}
+
 export const authService = {
-  register: async (data: RegisterUser) => {
+  register: async (data: RegisterUser): Promise<AuthResponse> => {
     const response = await apiClient.post("/auth/register", data);
-    return response;
+    return response as unknown as AuthResponse;
   },
-  login: async (data: LoginUser) => {
+  login: async (data: LoginUser): Promise<AuthResponse> => {
     const response = await apiClient.post("/auth/login", data);
-    return response;
+    return response as unknown as AuthResponse;
   },
 };

@@ -133,9 +133,79 @@ exports.Prisma.UserScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.InstallationScalarFieldEnum = {
+  id: 'id',
+  githubInstallationId: 'githubInstallationId',
+  accountLogin: 'accountLogin',
+  accountType: 'accountType',
+  accessToken: 'accessToken',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+};
+
+exports.Prisma.RepositoryScalarFieldEnum = {
+  id: 'id',
+  githubRepoId: 'githubRepoId',
+  fullName: 'fullName',
+  name: 'name',
+  private: 'private',
+  defaultBranch: 'defaultBranch',
+  language: 'language',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  installationId: 'installationId'
+};
+
+exports.Prisma.CodeChunkScalarFieldEnum = {
+  id: 'id',
+  filePath: 'filePath',
+  content: 'content',
+  startLine: 'startLine',
+  endLine: 'endLine',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  repositoryId: 'repositoryId'
+};
+
+exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
+  prNumber: 'prNumber',
+  prTitle: 'prTitle',
+  status: 'status',
+  reviewBody: 'reviewBody',
+  summary: 'summary',
+  fileCount: 'fileCount',
+  commentCount: 'commentCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  repositoryId: 'repositoryId',
+  userId: 'userId'
+};
+
+exports.Prisma.FixPrScalarFieldEnum = {
+  id: 'id',
+  fixPrNumber: 'fixPrNumber',
+  branchName: 'branchName',
+  status: 'status',
+  diffSummary: 'diffSummary',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  reviewId: 'reviewId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -148,9 +218,20 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Installation: 'Installation',
+  Repository: 'Repository',
+  CodeChunk: 'CodeChunk',
+  Review: 'Review',
+  FixPr: 'FixPr'
 };
 
 /**

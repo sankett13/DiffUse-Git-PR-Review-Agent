@@ -4,7 +4,9 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import { globalErrorHandler } from "./middlewares/errorHandler.js";
 import { NotFound } from "./utils/appError.js";
-import { th } from "zod/locales";
+import githubRoutes from "./routes/github.routes.js";
+import { authMiddleware } from "./middlewares/auth.middleware.js";
+
 
 const app: Application = express();
 
@@ -13,7 +15,12 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+import oauthRoutes from "./routes/oauth.routes.js";
+import "./config/passport.js"; // Initialize passport strategies
+
 app.use("/api/auth", authRoutes);
+app.use("/api/auth", oauthRoutes);
+app.use("/api/github", authMiddleware, githubRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");

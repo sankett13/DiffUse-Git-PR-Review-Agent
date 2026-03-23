@@ -2,6 +2,9 @@ import bcrypt from "bcrypt";
 import { prisma } from "../utils/prisma.js";
 import { BadRequest } from "../utils/appError.js";
 import type { LoginUser, RegisterUser } from "../types/auth.types.js";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "dummy_jwt_secret";
 
 export const registerUser = async (userData: RegisterUser) => {
   const existingUser = await prisma.user.findUnique({
@@ -49,5 +52,9 @@ export const loginUser = async (userData: LoginUser) => {
     throw BadRequest("Invalid email or password");
   }
 
-  return user;
+  const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, {
+    expiresIn: "1h",
+  });
+
+  return { user, accessToken };
 };

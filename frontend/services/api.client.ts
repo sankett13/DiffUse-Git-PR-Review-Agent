@@ -11,11 +11,18 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const authData = localStorage.getItem("auth-storage");
-    if (authData) {
-      const { accessToken } = JSON.parse(authData);
-      if (accessToken) {
-        config.headers["Authorization"] = `Bearer ${accessToken}`;
+    const authDataString = localStorage.getItem("auth-storage");
+    if (authDataString) {
+      try {
+        const authData = JSON.parse(authDataString);
+        // Zustand persist stores state under a "state" key by default
+        const accessToken = authData?.state?.accessToken;
+
+        if (accessToken) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+      } catch (e) {
+        console.error("Failed to parse auth-storage from localStorage", e);
       }
     }
 

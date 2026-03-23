@@ -45,12 +45,13 @@ export const loginUser = async (
     }
 
     // Handle user login logic here
-    const user = await loginUserService({ email, password });
+    const { user, accessToken } = await loginUserService({ email, password });
 
     res.status(200).json({
       success: true,
       message: "User logged in successfully!",
       data: user,
+      accessToken,
     });
   } catch (error) {
     next(error);
