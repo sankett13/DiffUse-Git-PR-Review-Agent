@@ -7,6 +7,7 @@ import { NotFound } from "./utils/appError.js";
 import githubRoutes from "./routes/github.routes.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
 import userRoutes from "./routes/user.routes.js";
+import webhookRoutes from "./routes/webhook.routes.js";
 
 
 const app: Application = express();
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/auth", oauthRoutes);
 app.use("/api/github", authMiddleware, githubRoutes);
 app.use("/api/user", authMiddleware, userRoutes);
+app.use("/webhooks", webhookRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");

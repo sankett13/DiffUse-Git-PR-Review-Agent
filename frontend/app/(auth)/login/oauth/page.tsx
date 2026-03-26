@@ -11,6 +11,9 @@ function OAuthCallbackContent() {
 
   useEffect(() => {
     if (token) {
+      // Sync to cookie for Next.js middleware
+      document.cookie = `diffuse_token=${token}; path=/; max-age=604800; samesite=lax`;
+
       // Access the store's state directly to manually set the auth payload
       useAuthStore.setState({
         accessToken: token,
@@ -29,7 +32,9 @@ function OAuthCallbackContent() {
     <div className="min-h-screen flex items-center justify-center bg-[#fafafa] text-black">
       <div className="flex flex-col items-center gap-6">
         <div className="w-8 h-8 border-[3px] border-black border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-[10px] font-bold tracking-widest uppercase text-gray-500">Authenticating</p>
+        <p className="text-[10px] font-bold tracking-widest uppercase text-gray-500">
+          Authenticating
+        </p>
       </div>
     </div>
   );
@@ -37,11 +42,13 @@ function OAuthCallbackContent() {
 
 export default function OAuthCallbackPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-[#fafafa] text-black">
-        <div className="w-8 h-8 border-[3px] border-black border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#fafafa] text-black">
+          <div className="w-8 h-8 border-[3px] border-black border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      }
+    >
       <OAuthCallbackContent />
     </Suspense>
   );

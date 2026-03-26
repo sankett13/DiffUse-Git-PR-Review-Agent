@@ -25,6 +25,9 @@ const useAuthStore = create<AuthState>()(
           try {
             const response = await authService.login(credentials);
             if (response.success) {
+              // Sync to cookie for Next.js middleware
+              document.cookie = `diffuse_token=${response.accessToken}; path=/; max-age=604800; samesite=lax`;
+              
               set({
                 accessToken: response.accessToken,
                 isAuthenticated: true,
@@ -53,6 +56,7 @@ const useAuthStore = create<AuthState>()(
         },
 
         logout: () => {
+          document.cookie = 'diffuse_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
           set({
             accessToken: null,
             isAuthenticated: false,
