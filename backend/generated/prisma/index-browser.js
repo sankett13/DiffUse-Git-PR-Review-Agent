@@ -155,6 +155,8 @@ exports.Prisma.RepositoryScalarFieldEnum = {
   language: 'language',
   description: 'description',
   isActive: 'isActive',
+  status: 'status',
+  repoMap: 'repoMap',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   installationId: 'installationId'
@@ -162,10 +164,13 @@ exports.Prisma.RepositoryScalarFieldEnum = {
 
 exports.Prisma.CodeChunkScalarFieldEnum = {
   id: 'id',
+  chunkName: 'chunkName',
+  chunkType: 'chunkType',
   filePath: 'filePath',
   content: 'content',
   startLine: 'startLine',
   endLine: 'endLine',
+  fileSha: 'fileSha',
   metadata: 'metadata',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

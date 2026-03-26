@@ -5,8 +5,8 @@ generator client {
 }
 
 datasource db {
-  provider   = "postgresql"
-  extensions = [pgvector, pg_graphql, pg_stat_statements, pgcrypto, supabase_vault, uuid_ossp(map: "uuid-ossp")]
+  provider = "postgresql"
+  //extensions = [pgvector, pg_graphql, pg_stat_statements, pgcrypto, supabase_vault, uuid_ossp(map: "uuid-ossp")]
 }
 
 // ─────────────────────────────────────────────
@@ -63,6 +63,8 @@ model Repository {
   language      String?
   description   String?
   isActive      Boolean  @default(true)
+  status        String   @default("indexing") // "indexing" | "ready" | "failed"
+  repoMap       Json?    @map("repo_map")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -80,10 +82,13 @@ model Repository {
 // ─────────────────────────────────────────────
 model CodeChunk {
   id        String                       @id @default(uuid())
+  chunkName String
+  chunkType String
   filePath  String // e.g. "src/utils/auth.ts"
   content   String // raw code content
   startLine Int
   endLine   Int
+  fileSha   String
   embedding Unsupported("vector(1536)")?
   metadata  Json? // any extra info (language, sha, etc.)
   createdAt DateTime                     @default(now())

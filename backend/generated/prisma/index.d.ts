@@ -3808,6 +3808,7 @@ export namespace Prisma {
     language: string | null
     description: string | null
     isActive: boolean | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
     installationId: string | null
@@ -3823,6 +3824,7 @@ export namespace Prisma {
     language: string | null
     description: string | null
     isActive: boolean | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
     installationId: string | null
@@ -3838,6 +3840,8 @@ export namespace Prisma {
     language: number
     description: number
     isActive: number
+    status: number
+    repoMap: number
     createdAt: number
     updatedAt: number
     installationId: number
@@ -3863,6 +3867,7 @@ export namespace Prisma {
     language?: true
     description?: true
     isActive?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     installationId?: true
@@ -3878,6 +3883,7 @@ export namespace Prisma {
     language?: true
     description?: true
     isActive?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     installationId?: true
@@ -3893,6 +3899,8 @@ export namespace Prisma {
     language?: true
     description?: true
     isActive?: true
+    status?: true
+    repoMap?: true
     createdAt?: true
     updatedAt?: true
     installationId?: true
@@ -3995,6 +4003,8 @@ export namespace Prisma {
     language: string | null
     description: string | null
     isActive: boolean
+    status: string
+    repoMap: JsonValue | null
     createdAt: Date
     updatedAt: Date
     installationId: string
@@ -4029,6 +4039,8 @@ export namespace Prisma {
     language?: boolean
     description?: boolean
     isActive?: boolean
+    status?: boolean
+    repoMap?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     installationId?: boolean
@@ -4048,6 +4060,8 @@ export namespace Prisma {
     language?: boolean
     description?: boolean
     isActive?: boolean
+    status?: boolean
+    repoMap?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     installationId?: boolean
@@ -4064,6 +4078,8 @@ export namespace Prisma {
     language?: boolean
     description?: boolean
     isActive?: boolean
+    status?: boolean
+    repoMap?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     installationId?: boolean
@@ -4080,12 +4096,14 @@ export namespace Prisma {
     language?: boolean
     description?: boolean
     isActive?: boolean
+    status?: boolean
+    repoMap?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     installationId?: boolean
   }
 
-  export type RepositoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "githubRepoId" | "fullName" | "name" | "private" | "defaultBranch" | "language" | "description" | "isActive" | "createdAt" | "updatedAt" | "installationId", ExtArgs["result"]["repository"]>
+  export type RepositoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "githubRepoId" | "fullName" | "name" | "private" | "defaultBranch" | "language" | "description" | "isActive" | "status" | "repoMap" | "createdAt" | "updatedAt" | "installationId", ExtArgs["result"]["repository"]>
   export type RepositoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     installation?: boolean | InstallationDefaultArgs<ExtArgs>
     codeChunks?: boolean | Repository$codeChunksArgs<ExtArgs>
@@ -4116,6 +4134,8 @@ export namespace Prisma {
       language: string | null
       description: string | null
       isActive: boolean
+      status: string
+      repoMap: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
       installationId: string
@@ -4554,6 +4574,8 @@ export namespace Prisma {
     readonly language: FieldRef<"Repository", 'String'>
     readonly description: FieldRef<"Repository", 'String'>
     readonly isActive: FieldRef<"Repository", 'Boolean'>
+    readonly status: FieldRef<"Repository", 'String'>
+    readonly repoMap: FieldRef<"Repository", 'Json'>
     readonly createdAt: FieldRef<"Repository", 'DateTime'>
     readonly updatedAt: FieldRef<"Repository", 'DateTime'>
     readonly installationId: FieldRef<"Repository", 'String'>
@@ -5048,10 +5070,13 @@ export namespace Prisma {
 
   export type CodeChunkMinAggregateOutputType = {
     id: string | null
+    chunkName: string | null
+    chunkType: string | null
     filePath: string | null
     content: string | null
     startLine: number | null
     endLine: number | null
+    fileSha: string | null
     createdAt: Date | null
     updatedAt: Date | null
     repositoryId: string | null
@@ -5059,10 +5084,13 @@ export namespace Prisma {
 
   export type CodeChunkMaxAggregateOutputType = {
     id: string | null
+    chunkName: string | null
+    chunkType: string | null
     filePath: string | null
     content: string | null
     startLine: number | null
     endLine: number | null
+    fileSha: string | null
     createdAt: Date | null
     updatedAt: Date | null
     repositoryId: string | null
@@ -5070,10 +5098,13 @@ export namespace Prisma {
 
   export type CodeChunkCountAggregateOutputType = {
     id: number
+    chunkName: number
+    chunkType: number
     filePath: number
     content: number
     startLine: number
     endLine: number
+    fileSha: number
     metadata: number
     createdAt: number
     updatedAt: number
@@ -5094,10 +5125,13 @@ export namespace Prisma {
 
   export type CodeChunkMinAggregateInputType = {
     id?: true
+    chunkName?: true
+    chunkType?: true
     filePath?: true
     content?: true
     startLine?: true
     endLine?: true
+    fileSha?: true
     createdAt?: true
     updatedAt?: true
     repositoryId?: true
@@ -5105,10 +5139,13 @@ export namespace Prisma {
 
   export type CodeChunkMaxAggregateInputType = {
     id?: true
+    chunkName?: true
+    chunkType?: true
     filePath?: true
     content?: true
     startLine?: true
     endLine?: true
+    fileSha?: true
     createdAt?: true
     updatedAt?: true
     repositoryId?: true
@@ -5116,10 +5153,13 @@ export namespace Prisma {
 
   export type CodeChunkCountAggregateInputType = {
     id?: true
+    chunkName?: true
+    chunkType?: true
     filePath?: true
     content?: true
     startLine?: true
     endLine?: true
+    fileSha?: true
     metadata?: true
     createdAt?: true
     updatedAt?: true
@@ -5215,10 +5255,13 @@ export namespace Prisma {
 
   export type CodeChunkGroupByOutputType = {
     id: string
+    chunkName: string
+    chunkType: string
     filePath: string
     content: string
     startLine: number
     endLine: number
+    fileSha: string
     metadata: JsonValue | null
     createdAt: Date
     updatedAt: Date
@@ -5246,10 +5289,13 @@ export namespace Prisma {
 
   export type CodeChunkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    chunkName?: boolean
+    chunkType?: boolean
     filePath?: boolean
     content?: boolean
     startLine?: boolean
     endLine?: boolean
+    fileSha?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5259,10 +5305,13 @@ export namespace Prisma {
 
   export type CodeChunkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    chunkName?: boolean
+    chunkType?: boolean
     filePath?: boolean
     content?: boolean
     startLine?: boolean
     endLine?: boolean
+    fileSha?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5272,10 +5321,13 @@ export namespace Prisma {
 
   export type CodeChunkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    chunkName?: boolean
+    chunkType?: boolean
     filePath?: boolean
     content?: boolean
     startLine?: boolean
     endLine?: boolean
+    fileSha?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5285,17 +5337,20 @@ export namespace Prisma {
 
   export type CodeChunkSelectScalar = {
     id?: boolean
+    chunkName?: boolean
+    chunkType?: boolean
     filePath?: boolean
     content?: boolean
     startLine?: boolean
     endLine?: boolean
+    fileSha?: boolean
     metadata?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     repositoryId?: boolean
   }
 
-  export type CodeChunkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filePath" | "content" | "startLine" | "endLine" | "metadata" | "createdAt" | "updatedAt" | "repositoryId", ExtArgs["result"]["codeChunk"]>
+  export type CodeChunkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "chunkName" | "chunkType" | "filePath" | "content" | "startLine" | "endLine" | "fileSha" | "metadata" | "createdAt" | "updatedAt" | "repositoryId", ExtArgs["result"]["codeChunk"]>
   export type CodeChunkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     repository?: boolean | RepositoryDefaultArgs<ExtArgs>
   }
@@ -5313,10 +5368,13 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      chunkName: string
+      chunkType: string
       filePath: string
       content: string
       startLine: number
       endLine: number
+      fileSha: string
       metadata: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
@@ -5746,10 +5804,13 @@ export namespace Prisma {
    */
   interface CodeChunkFieldRefs {
     readonly id: FieldRef<"CodeChunk", 'String'>
+    readonly chunkName: FieldRef<"CodeChunk", 'String'>
+    readonly chunkType: FieldRef<"CodeChunk", 'String'>
     readonly filePath: FieldRef<"CodeChunk", 'String'>
     readonly content: FieldRef<"CodeChunk", 'String'>
     readonly startLine: FieldRef<"CodeChunk", 'Int'>
     readonly endLine: FieldRef<"CodeChunk", 'Int'>
+    readonly fileSha: FieldRef<"CodeChunk", 'String'>
     readonly metadata: FieldRef<"CodeChunk", 'Json'>
     readonly createdAt: FieldRef<"CodeChunk", 'DateTime'>
     readonly updatedAt: FieldRef<"CodeChunk", 'DateTime'>
@@ -8591,6 +8652,8 @@ export namespace Prisma {
     language: 'language',
     description: 'description',
     isActive: 'isActive',
+    status: 'status',
+    repoMap: 'repoMap',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     installationId: 'installationId'
@@ -8601,10 +8664,13 @@ export namespace Prisma {
 
   export const CodeChunkScalarFieldEnum: {
     id: 'id',
+    chunkName: 'chunkName',
+    chunkType: 'chunkType',
     filePath: 'filePath',
     content: 'content',
     startLine: 'startLine',
     endLine: 'endLine',
+    fileSha: 'fileSha',
     metadata: 'metadata',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -8948,6 +9014,8 @@ export namespace Prisma {
     language?: StringNullableFilter<"Repository"> | string | null
     description?: StringNullableFilter<"Repository"> | string | null
     isActive?: BoolFilter<"Repository"> | boolean
+    status?: StringFilter<"Repository"> | string
+    repoMap?: JsonNullableFilter<"Repository">
     createdAt?: DateTimeFilter<"Repository"> | Date | string
     updatedAt?: DateTimeFilter<"Repository"> | Date | string
     installationId?: StringFilter<"Repository"> | string
@@ -8966,6 +9034,8 @@ export namespace Prisma {
     language?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    status?: SortOrder
+    repoMap?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     installationId?: SortOrder
@@ -8987,6 +9057,8 @@ export namespace Prisma {
     language?: StringNullableFilter<"Repository"> | string | null
     description?: StringNullableFilter<"Repository"> | string | null
     isActive?: BoolFilter<"Repository"> | boolean
+    status?: StringFilter<"Repository"> | string
+    repoMap?: JsonNullableFilter<"Repository">
     createdAt?: DateTimeFilter<"Repository"> | Date | string
     updatedAt?: DateTimeFilter<"Repository"> | Date | string
     installationId?: StringFilter<"Repository"> | string
@@ -9005,6 +9077,8 @@ export namespace Prisma {
     language?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    status?: SortOrder
+    repoMap?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     installationId?: SortOrder
@@ -9028,6 +9102,8 @@ export namespace Prisma {
     language?: StringNullableWithAggregatesFilter<"Repository"> | string | null
     description?: StringNullableWithAggregatesFilter<"Repository"> | string | null
     isActive?: BoolWithAggregatesFilter<"Repository"> | boolean
+    status?: StringWithAggregatesFilter<"Repository"> | string
+    repoMap?: JsonNullableWithAggregatesFilter<"Repository">
     createdAt?: DateTimeWithAggregatesFilter<"Repository"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Repository"> | Date | string
     installationId?: StringWithAggregatesFilter<"Repository"> | string
@@ -9038,10 +9114,13 @@ export namespace Prisma {
     OR?: CodeChunkWhereInput[]
     NOT?: CodeChunkWhereInput | CodeChunkWhereInput[]
     id?: StringFilter<"CodeChunk"> | string
+    chunkName?: StringFilter<"CodeChunk"> | string
+    chunkType?: StringFilter<"CodeChunk"> | string
     filePath?: StringFilter<"CodeChunk"> | string
     content?: StringFilter<"CodeChunk"> | string
     startLine?: IntFilter<"CodeChunk"> | number
     endLine?: IntFilter<"CodeChunk"> | number
+    fileSha?: StringFilter<"CodeChunk"> | string
     metadata?: JsonNullableFilter<"CodeChunk">
     createdAt?: DateTimeFilter<"CodeChunk"> | Date | string
     updatedAt?: DateTimeFilter<"CodeChunk"> | Date | string
@@ -9051,10 +9130,13 @@ export namespace Prisma {
 
   export type CodeChunkOrderByWithRelationInput = {
     id?: SortOrder
+    chunkName?: SortOrder
+    chunkType?: SortOrder
     filePath?: SortOrder
     content?: SortOrder
     startLine?: SortOrder
     endLine?: SortOrder
+    fileSha?: SortOrder
     metadata?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9067,10 +9149,13 @@ export namespace Prisma {
     AND?: CodeChunkWhereInput | CodeChunkWhereInput[]
     OR?: CodeChunkWhereInput[]
     NOT?: CodeChunkWhereInput | CodeChunkWhereInput[]
+    chunkName?: StringFilter<"CodeChunk"> | string
+    chunkType?: StringFilter<"CodeChunk"> | string
     filePath?: StringFilter<"CodeChunk"> | string
     content?: StringFilter<"CodeChunk"> | string
     startLine?: IntFilter<"CodeChunk"> | number
     endLine?: IntFilter<"CodeChunk"> | number
+    fileSha?: StringFilter<"CodeChunk"> | string
     metadata?: JsonNullableFilter<"CodeChunk">
     createdAt?: DateTimeFilter<"CodeChunk"> | Date | string
     updatedAt?: DateTimeFilter<"CodeChunk"> | Date | string
@@ -9080,10 +9165,13 @@ export namespace Prisma {
 
   export type CodeChunkOrderByWithAggregationInput = {
     id?: SortOrder
+    chunkName?: SortOrder
+    chunkType?: SortOrder
     filePath?: SortOrder
     content?: SortOrder
     startLine?: SortOrder
     endLine?: SortOrder
+    fileSha?: SortOrder
     metadata?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9100,10 +9188,13 @@ export namespace Prisma {
     OR?: CodeChunkScalarWhereWithAggregatesInput[]
     NOT?: CodeChunkScalarWhereWithAggregatesInput | CodeChunkScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"CodeChunk"> | string
+    chunkName?: StringWithAggregatesFilter<"CodeChunk"> | string
+    chunkType?: StringWithAggregatesFilter<"CodeChunk"> | string
     filePath?: StringWithAggregatesFilter<"CodeChunk"> | string
     content?: StringWithAggregatesFilter<"CodeChunk"> | string
     startLine?: IntWithAggregatesFilter<"CodeChunk"> | number
     endLine?: IntWithAggregatesFilter<"CodeChunk"> | number
+    fileSha?: StringWithAggregatesFilter<"CodeChunk"> | string
     metadata?: JsonNullableWithAggregatesFilter<"CodeChunk">
     createdAt?: DateTimeWithAggregatesFilter<"CodeChunk"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CodeChunk"> | Date | string
@@ -9477,6 +9568,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     installation: InstallationCreateNestedOneWithoutRepositoriesInput
@@ -9494,6 +9587,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     installationId: string
@@ -9511,6 +9606,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     installation?: InstallationUpdateOneRequiredWithoutRepositoriesNestedInput
@@ -9528,6 +9625,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     installationId?: StringFieldUpdateOperationsInput | string
@@ -9545,6 +9644,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     installationId: string
@@ -9560,6 +9661,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9574,6 +9677,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     installationId?: StringFieldUpdateOperationsInput | string
@@ -9581,10 +9686,13 @@ export namespace Prisma {
 
   export type CodeChunkCreateInput = {
     id?: string
+    chunkName: string
+    chunkType: string
     filePath: string
     content: string
     startLine: number
     endLine: number
+    fileSha: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9593,10 +9701,13 @@ export namespace Prisma {
 
   export type CodeChunkUncheckedCreateInput = {
     id?: string
+    chunkName: string
+    chunkType: string
     filePath: string
     content: string
     startLine: number
     endLine: number
+    fileSha: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9605,10 +9716,13 @@ export namespace Prisma {
 
   export type CodeChunkUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chunkName?: StringFieldUpdateOperationsInput | string
+    chunkType?: StringFieldUpdateOperationsInput | string
     filePath?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     startLine?: IntFieldUpdateOperationsInput | number
     endLine?: IntFieldUpdateOperationsInput | number
+    fileSha?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9617,10 +9731,13 @@ export namespace Prisma {
 
   export type CodeChunkUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chunkName?: StringFieldUpdateOperationsInput | string
+    chunkType?: StringFieldUpdateOperationsInput | string
     filePath?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     startLine?: IntFieldUpdateOperationsInput | number
     endLine?: IntFieldUpdateOperationsInput | number
+    fileSha?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9629,10 +9746,13 @@ export namespace Prisma {
 
   export type CodeChunkCreateManyInput = {
     id?: string
+    chunkName: string
+    chunkType: string
     filePath: string
     content: string
     startLine: number
     endLine: number
+    fileSha: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -9641,10 +9761,13 @@ export namespace Prisma {
 
   export type CodeChunkUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chunkName?: StringFieldUpdateOperationsInput | string
+    chunkType?: StringFieldUpdateOperationsInput | string
     filePath?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     startLine?: IntFieldUpdateOperationsInput | number
     endLine?: IntFieldUpdateOperationsInput | number
+    fileSha?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9652,10 +9775,13 @@ export namespace Prisma {
 
   export type CodeChunkUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chunkName?: StringFieldUpdateOperationsInput | string
+    chunkType?: StringFieldUpdateOperationsInput | string
     filePath?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     startLine?: IntFieldUpdateOperationsInput | number
     endLine?: IntFieldUpdateOperationsInput | number
+    fileSha?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10115,6 +10241,29 @@ export namespace Prisma {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type InstallationScalarRelationFilter = {
     is?: InstallationWhereInput
@@ -10141,6 +10290,8 @@ export namespace Prisma {
     language?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    status?: SortOrder
+    repoMap?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     installationId?: SortOrder
@@ -10160,6 +10311,7 @@ export namespace Prisma {
     language?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     installationId?: SortOrder
@@ -10175,6 +10327,7 @@ export namespace Prisma {
     language?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     installationId?: SortOrder
@@ -10190,78 +10343,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type RepositoryScalarRelationFilter = {
-    is?: RepositoryWhereInput
-    isNot?: RepositoryWhereInput
-  }
-
-  export type CodeChunkCountOrderByAggregateInput = {
-    id?: SortOrder
-    filePath?: SortOrder
-    content?: SortOrder
-    startLine?: SortOrder
-    endLine?: SortOrder
-    metadata?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    repositoryId?: SortOrder
-  }
-
-  export type CodeChunkAvgOrderByAggregateInput = {
-    startLine?: SortOrder
-    endLine?: SortOrder
-  }
-
-  export type CodeChunkMaxOrderByAggregateInput = {
-    id?: SortOrder
-    filePath?: SortOrder
-    content?: SortOrder
-    startLine?: SortOrder
-    endLine?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    repositoryId?: SortOrder
-  }
-
-  export type CodeChunkMinOrderByAggregateInput = {
-    id?: SortOrder
-    filePath?: SortOrder
-    content?: SortOrder
-    startLine?: SortOrder
-    endLine?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    repositoryId?: SortOrder
-  }
-
-  export type CodeChunkSumOrderByAggregateInput = {
-    startLine?: SortOrder
-    endLine?: SortOrder
   }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -10288,6 +10369,64 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type RepositoryScalarRelationFilter = {
+    is?: RepositoryWhereInput
+    isNot?: RepositoryWhereInput
+  }
+
+  export type CodeChunkCountOrderByAggregateInput = {
+    id?: SortOrder
+    chunkName?: SortOrder
+    chunkType?: SortOrder
+    filePath?: SortOrder
+    content?: SortOrder
+    startLine?: SortOrder
+    endLine?: SortOrder
+    fileSha?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    repositoryId?: SortOrder
+  }
+
+  export type CodeChunkAvgOrderByAggregateInput = {
+    startLine?: SortOrder
+    endLine?: SortOrder
+  }
+
+  export type CodeChunkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    chunkName?: SortOrder
+    chunkType?: SortOrder
+    filePath?: SortOrder
+    content?: SortOrder
+    startLine?: SortOrder
+    endLine?: SortOrder
+    fileSha?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    repositoryId?: SortOrder
+  }
+
+  export type CodeChunkMinOrderByAggregateInput = {
+    id?: SortOrder
+    chunkName?: SortOrder
+    chunkType?: SortOrder
+    filePath?: SortOrder
+    content?: SortOrder
+    startLine?: SortOrder
+    endLine?: SortOrder
+    fileSha?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    repositoryId?: SortOrder
+  }
+
+  export type CodeChunkSumOrderByAggregateInput = {
+    startLine?: SortOrder
+    endLine?: SortOrder
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -11198,6 +11337,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     codeChunks?: CodeChunkCreateNestedManyWithoutRepositoryInput
@@ -11214,6 +11355,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     codeChunks?: CodeChunkUncheckedCreateNestedManyWithoutRepositoryInput
@@ -11298,6 +11441,8 @@ export namespace Prisma {
     language?: StringNullableFilter<"Repository"> | string | null
     description?: StringNullableFilter<"Repository"> | string | null
     isActive?: BoolFilter<"Repository"> | boolean
+    status?: StringFilter<"Repository"> | string
+    repoMap?: JsonNullableFilter<"Repository">
     createdAt?: DateTimeFilter<"Repository"> | Date | string
     updatedAt?: DateTimeFilter<"Repository"> | Date | string
     installationId?: StringFilter<"Repository"> | string
@@ -11334,10 +11479,13 @@ export namespace Prisma {
 
   export type CodeChunkCreateWithoutRepositoryInput = {
     id?: string
+    chunkName: string
+    chunkType: string
     filePath: string
     content: string
     startLine: number
     endLine: number
+    fileSha: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11345,10 +11493,13 @@ export namespace Prisma {
 
   export type CodeChunkUncheckedCreateWithoutRepositoryInput = {
     id?: string
+    chunkName: string
+    chunkType: string
     filePath: string
     content: string
     startLine: number
     endLine: number
+    fileSha: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11460,10 +11611,13 @@ export namespace Prisma {
     OR?: CodeChunkScalarWhereInput[]
     NOT?: CodeChunkScalarWhereInput | CodeChunkScalarWhereInput[]
     id?: StringFilter<"CodeChunk"> | string
+    chunkName?: StringFilter<"CodeChunk"> | string
+    chunkType?: StringFilter<"CodeChunk"> | string
     filePath?: StringFilter<"CodeChunk"> | string
     content?: StringFilter<"CodeChunk"> | string
     startLine?: IntFilter<"CodeChunk"> | number
     endLine?: IntFilter<"CodeChunk"> | number
+    fileSha?: StringFilter<"CodeChunk"> | string
     metadata?: JsonNullableFilter<"CodeChunk">
     createdAt?: DateTimeFilter<"CodeChunk"> | Date | string
     updatedAt?: DateTimeFilter<"CodeChunk"> | Date | string
@@ -11496,6 +11650,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     installation: InstallationCreateNestedOneWithoutRepositoriesInput
@@ -11512,6 +11668,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     installationId: string
@@ -11544,6 +11702,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     installation?: InstallationUpdateOneRequiredWithoutRepositoriesNestedInput
@@ -11560,6 +11720,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     installationId?: StringFieldUpdateOperationsInput | string
@@ -11576,6 +11738,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     installation: InstallationCreateNestedOneWithoutRepositoriesInput
@@ -11592,6 +11756,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     installationId: string
@@ -11682,6 +11848,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     installation?: InstallationUpdateOneRequiredWithoutRepositoriesNestedInput
@@ -11698,6 +11866,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     installationId?: StringFieldUpdateOperationsInput | string
@@ -11964,6 +12134,8 @@ export namespace Prisma {
     language?: string | null
     description?: string | null
     isActive?: boolean
+    status?: string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11978,6 +12150,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     codeChunks?: CodeChunkUpdateManyWithoutRepositoryNestedInput
@@ -11994,6 +12168,8 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     codeChunks?: CodeChunkUncheckedUpdateManyWithoutRepositoryNestedInput
@@ -12010,16 +12186,21 @@ export namespace Prisma {
     language?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    repoMap?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CodeChunkCreateManyRepositoryInput = {
     id?: string
+    chunkName: string
+    chunkType: string
     filePath: string
     content: string
     startLine: number
     endLine: number
+    fileSha: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12041,10 +12222,13 @@ export namespace Prisma {
 
   export type CodeChunkUpdateWithoutRepositoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chunkName?: StringFieldUpdateOperationsInput | string
+    chunkType?: StringFieldUpdateOperationsInput | string
     filePath?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     startLine?: IntFieldUpdateOperationsInput | number
     endLine?: IntFieldUpdateOperationsInput | number
+    fileSha?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12052,10 +12236,13 @@ export namespace Prisma {
 
   export type CodeChunkUncheckedUpdateWithoutRepositoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chunkName?: StringFieldUpdateOperationsInput | string
+    chunkType?: StringFieldUpdateOperationsInput | string
     filePath?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     startLine?: IntFieldUpdateOperationsInput | number
     endLine?: IntFieldUpdateOperationsInput | number
+    fileSha?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12063,10 +12250,13 @@ export namespace Prisma {
 
   export type CodeChunkUncheckedUpdateManyWithoutRepositoryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    chunkName?: StringFieldUpdateOperationsInput | string
+    chunkType?: StringFieldUpdateOperationsInput | string
     filePath?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     startLine?: IntFieldUpdateOperationsInput | number
     endLine?: IntFieldUpdateOperationsInput | number
+    fileSha?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

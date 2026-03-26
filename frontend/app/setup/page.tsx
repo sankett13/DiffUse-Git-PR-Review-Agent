@@ -2,23 +2,21 @@
 import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import useAuthStore from "@/store/useAuthStore";
+import { githubService } from "@/services/github.service";
 
 export default function SetupPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const installationId = searchParams.get("installation_id");
+  console.log(installationId);
   const { accessToken } = useAuthStore();
 
   useEffect(() => {
     if (installationId && accessToken) {
-      fetch("http://localhost:4000/api/github/save-installation", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ installationId }),
-      }).then(() => router.push("/dashboard"));
+      githubService
+        .saveInstallation(installationId)
+        .then(() => router.push("/dashboard"))
+        .catch((error) => console.log(error));
     }
   }, [installationId, accessToken]);
 

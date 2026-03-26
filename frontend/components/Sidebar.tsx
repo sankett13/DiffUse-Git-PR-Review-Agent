@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import useAuthStore from "@/store/useAuthStore";
+import { motion } from "framer-motion";
 
 import {
   MdOutlineDashboard,
@@ -73,16 +74,23 @@ export default function Sidebar() {
             <Link
               key={link.name}
               href={link.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`relative flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 isExactActive
-                  ? "bg-black text-white"
+                  ? "text-white"
                   : "text-gray-500 hover:bg-gray-100 hover:text-black"
               }`}
             >
+              {isExactActive && (
+                <motion.div
+                  layoutId="active-sidebar-tab"
+                  className="absolute inset-0 bg-black rounded-md"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
               <Icon
-                className={`w-[18px] h-[18px] ${isExactActive ? "text-white" : "text-gray-400 group-hover:text-black"}`}
+                className={`relative z-10 w-[18px] h-[18px] ${isExactActive ? "text-white" : "text-gray-400 group-hover:text-black"}`}
               />
-              {link.name}
+              <span className="relative z-10">{link.name}</span>
             </Link>
           );
         })}
@@ -98,16 +106,23 @@ export default function Sidebar() {
             <Link
               key={link.name}
               href={link.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`relative flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActive
-                  ? "bg-black text-white"
+                  ? "text-white"
                   : "text-gray-500 hover:bg-gray-100 hover:text-black"
               }`}
             >
+              {isActive && (
+                <motion.div
+                  layoutId="active-sidebar-tab"
+                  className="absolute inset-0 bg-black rounded-md"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
               <Icon
-                className={`w-[18px] h-[18px] ${isActive ? "text-white" : "text-gray-400 group-hover:text-black"}`}
+                className={`relative z-10 w-[18px] h-[18px] ${isActive ? "text-white" : "text-gray-400 group-hover:text-black"}`}
               />
-              {link.name}
+              <span className="relative z-10">{link.name}</span>
             </Link>
           );
         })}

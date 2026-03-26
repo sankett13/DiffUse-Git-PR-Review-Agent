@@ -1,7 +1,12 @@
 import { Router } from "express";
 import { prisma } from "../utils/prisma.js";
 import type { Request, Response } from "express";
-import { getInstallationRepos } from "../services/githubService.js";
+import { getInstallationRepos } from "../services/github.service.js";
+import {
+  connectRepo,
+  getLoggedUserRepos,
+  disconnectRepo,
+} from "../controllers/github.controller.js";
 
 const router = Router();
 
@@ -45,14 +50,18 @@ router.get("/repos", async (req: Request, res: Response) => {
   }
 
   try {
-    const repos = await getInstallationRepos(
-      installation.githubInstallationId
-    );
+    const repos = await getInstallationRepos(installation.githubInstallationId);
     res.json({ repos, connected: true });
   } catch (error) {
     console.error("Failed to fetch repos:", error);
     res.status(500).json({ error: "Failed to fetch repositories" });
   }
 });
+
+router.post("/repos/connect", connectRepo);
+
+router.delete("/repos/:repoId", disconnectRepo);
+
+router.get("/user-repos", getLoggedUserRepos);
 
 export default router;

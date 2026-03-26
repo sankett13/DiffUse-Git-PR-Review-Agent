@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import useAuthStore from "@/store/useAuthStore";
+import { githubService } from "@/services/github.service";
+import AvailableRepoCard from "./AvailableRepoCard";
+import Link from "next/link";
 
-interface Repo {
+export interface Repo {
   id: number;
   name: string;
   full_name: string;
@@ -12,6 +15,10 @@ interface Repo {
   language: string | null;
   description: string | null;
   updated_at: string | null;
+}
+
+interface ConnectedRepo {
+  githubRepoId: number;
 }
 
 export function ConnectGithub() {
@@ -23,21 +30,54 @@ export function ConnectGithub() {
   const [connected, setConnected] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [connectedRepoIds, setConnectedRepoIds] = useState<Set<number>>(
+    new Set(),
+  );
+  const [connectingRepoId, setConnectingRepoId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!accessToken) return;
 
-    fetch("http://localhost:4000/api/github/repos", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setConnected(data.connected);
-        setRepos(data.repos ?? []);
-      })
-      .catch(() => setError("Failed to load repositories."))
-      .finally(() => setLoading(false));
+    const loadRepos = async () => {
+      try {
+        const [githubData, userReposData] = await Promise.all([
+          githubService.getRepos(),
+          githubService.userRepos(),
+        ]);
+        setConnected(githubData.connected);
+        setRepos(githubData.repos ?? []);
+        const connectedIds = new Set(
+          userReposData.repos.map((r: ConnectedRepo) => r.githubRepoId),
+        );
+        setConnectedRepoIds(connectedIds);
+      } catch (err) {
+        setError("Failed to load repositories.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRepos();
   }, [accessToken]);
+
+  const handleSelect = async (repo: Repo) => {
+    setConnectingRepoId(repo.id);
+    try {
+      await githubService.connectRepo(
+        repo.id,
+        repo.name,
+        repo.full_name,
+        repo.private,
+        repo.language,
+        repo.description,
+      );
+      setConnectedRepoIds((prev) => new Set(prev).add(repo.id));
+    } catch (err) {
+      console.error("Failed to connect repo:", err);
+    } finally {
+      setConnectingRepoId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -76,58 +116,45 @@ export function ConnectGithub() {
     );
   }
 
+  const availableRepos = repos.filter((repo) => !connectedRepoIds.has(repo.id));
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Your Repositories</h2>
-        <a
-          href={installUrl}
-          className="text-sm text-gray-500 hover:text-black transition underline underline-offset-2"
-        >
-          Manage on GitHub
-        </a>
+        <h2 className="text-lg font-semibold">Available Repositories</h2>
+        <div className="flex items-center gap-4">
+          {connectedRepoIds.size > 0 && (
+            <Link
+              href="/dashboard/repositories"
+              className="text-sm text-green-600 px-2 py-1 rounded-full border border-green-600 bg-green-100 hover:bg-green-200 transition  "
+            >
+              {connectedRepoIds.size} connected
+            </Link>
+          )}
+          <a
+            href={installUrl}
+            className="text-sm text-gray-500 hover:text-black transition underline underline-offset-2"
+          >
+            Manage on GitHub
+          </a>
+        </div>
       </div>
 
-      {repos.length === 0 ? (
-        <p className="text-gray-500 text-sm">No repositories found for this installation.</p>
-      ) : (
+      {availableRepos.length === 0 && connectedRepoIds.size > 0 && (
+        <p className="text-gray-500 text-sm">
+          All available repositories are connected.
+        </p>
+      )}
+
+      {availableRepos.length > 0 && (
         <ul className="flex flex-col gap-3">
-          {repos.map((repo) => (
-            <li
+          {availableRepos.map((repo) => (
+            <AvailableRepoCard
               key={repo.id}
-              className="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 hover:bg-gray-50 transition"
-            >
-              <div className="flex flex-col gap-0.5 min-w-0">
-                <div className="flex items-center gap-2">
-                  <a
-                    href={repo.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-sm hover:underline truncate"
-                  >
-                    {repo.name}
-                  </a>
-                  <span
-                    className={`text-xs px-1.5 py-0.5 rounded-full border font-medium ${
-                      repo.private
-                        ? "border-amber-300 text-amber-700 bg-amber-50"
-                        : "border-green-300 text-green-700 bg-green-50"
-                    }`}
-                  >
-                    {repo.private ? "Private" : "Public"}
-                  </span>
-                </div>
-                {repo.description && (
-                  <p className="text-xs text-gray-500 truncate">{repo.description}</p>
-                )}
-                {repo.language && (
-                  <span className="text-xs text-gray-400">{repo.language}</span>
-                )}
-              </div>
-              <button className="ml-4 shrink-0 text-sm bg-black text-white px-3 py-1.5 rounded-md hover:bg-gray-800 transition">
-                Select
-              </button>
-            </li>
+              repo={repo}
+              onSelect={() => handleSelect(repo)}
+              isConnecting={connectingRepoId === repo.id}
+            />
           ))}
         </ul>
       )}
